@@ -46,7 +46,7 @@ class _MainAppState extends State<MainApp> {
                   print(state);
                   print(state.status);
                   switch (state.status) {
-                    case AuthStatus.authenticated:
+                    case AuthStatus.authenticated || AuthStatus.unknown:
                       _navigator.pushAndRemoveUntil<void>(
                         MaterialPageRoute<void>(
                             builder: (_) => const Dashboard()),

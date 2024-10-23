@@ -16,6 +16,7 @@ dependencies:
   equatable: ^2.0.0
   uuid: ^3.0.0
   formz: ^0.7.0
+  dotted_border: ^2.1.0
 
 dev_dependencies:
   flutter_test:

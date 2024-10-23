@@ -23,26 +23,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onSubscriptionRequested(
     CheckLoggedInRequested event,
     Emitter<AuthState> emit,
-  ) {
-    return emit.onEach(
-      _authRepository.status,
-      onData: (status) async {
-        switch (status) {
-          case AuthStatus.unauthenticated:
-            return emit(const AuthState.unauthenticated());
-          case AuthStatus.authenticated:
-            final user = await _tryGetUser();
-            return emit(
-              user != null
-                  ? AuthState.authenticated(user)
-                  : const AuthState.unknown(),
-            );
-          case AuthStatus.unknown:
-            return emit(const AuthState.unknown());
-        }
-      },
-      onError: addError,
-    );
+  ) async {
+     return emit(const AuthState.unknown());
+    // return emit.onEach(
+    //   _authRepository.status,
+    //   onData: (status) async {
+    //     switch (status) {
+    //       case AuthStatus.unauthenticated:
+    //         return emit(const AuthState.unauthenticated());
+    //       case AuthStatus.authenticated:
+    //         final user = await _tryGetUser();
+    //         return emit(
+    //           user != null
+    //               ? AuthState.authenticated(user)
+    //               : const AuthState.unknown(),
+    //         );
+    //       case AuthStatus.unknown:
+    //         return emit(const AuthState.unknown());
+    //     }
+    //   },
+    //   onError: addError,
+    // );
   }
 
   void _onLogoutPressed(

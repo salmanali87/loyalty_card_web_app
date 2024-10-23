@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loyalty_card_web_app/src/auth/repo/auth_repo.dart';
+import 'package:loyalty_card_web_app/src/login/ui/login_form.dart';
+import 'package:loyalty_card_web_app/src/register/bloc/register_bloc.dart';
+import 'package:loyalty_card_web_app/src/register/repo/register_repo.dart';
+import 'package:loyalty_card_web_app/src/register/ui/signup_form.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -8,107 +14,50 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  TextEditingController _firstNameController = TextEditingController();
-  TextEditingController _lastNameController = TextEditingController();
-  TextEditingController _companyNameController = TextEditingController();
-  TextEditingController _phoneNoController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
+  late final RegistrationRepository _registerRepository;
+
+  @override
+  void initState() {
+    super.initState();
+    _registerRepository = RegistrationRepository();
+  }
 
   @override
   void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-    _companyNameController.dispose();
-    _phoneNoController.dispose();
-    _phoneNoController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
+    _registerRepository.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: size.width * 0.3,
-              height: size.height * 0.6,
-              color: Colors.orange,
-            ),
-            Container(
-              width: size.width * 0.3,
-              height: size.height * 0.6,
-              color: Colors.amber,
-              child: Column(
-                children: [
-                  Text("Sig Up"),
-                  TextField(
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal)),
-                        hintText: 'Name',
-                        labelText: 'Name',
-                        prefixIcon: Icon(
-                          Icons.email,
-                          color: Colors.green,
-                        ),
-                        suffixStyle: TextStyle(color: Colors.green)),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal)),
-                        hintText: 'Email',
-                        labelText: 'Email',
-                        prefixIcon: Icon(
-                          Icons.email,
-                          color: Colors.green,
-                        ),
-                        suffixStyle: TextStyle(color: Colors.green)),
-                  ),
-                  TextField(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.teal)),
-                          hintText: 'Password',
-                          labelText: 'Password',
-                          prefixIcon: Icon(
-                            Icons.key,
-                            color: Colors.green,
-                          ),
-                          suffixIcon: Icon(
-                            Icons.visibility,
-                            color: Colors.green,
-                          ))),
-                  TextField(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.teal)),
-                          hintText: 'Confirm Password',
-                          labelText: 'Confirm Password',
-                          prefixIcon: Icon(
-                            Icons.key,
-                            color: Colors.green,
-                          ),
-                          suffixIcon: Icon(
-                            Icons.visibility,
-                            color: Colors.green,
-                          ))),
-                  TextButton(onPressed: () {}, child: const Text("Register"))
-                ],
+    return BlocProvider(
+      create: (context) => RegisterBloc(
+          registerRepository: _registerRepository,
+          authRepository: context.read<AuthRepository>()),
+      child: Scaffold(
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: size.width * 0.3,
+                height: size.height,
+                color: Colors.orange,
               ),
-            ),
-          ],
+              Container(
+                width: size.width * 0.3,
+                height: size.height,
+                color: Colors.amber,
+                child: const Column(
+                  children: [Text("Sig Up"), SignupForm()],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -15,7 +15,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({required AuthRepository authRepository})
       : _authRepository = authRepository,
         super(const LoginState()) {
-    on<UsernameChanged>(_onUsernameChanged);
+    on<EmailChanged>(_onEmailChanged);
     on<PasswordChanged>(_onPasswordChanged);
     on<LoginSubmitted>(_onLoginPressed);
     on<LogoutSubmitted>(_onLogoutPressed);
@@ -23,15 +23,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   final AuthRepository _authRepository;
 
-  void _onUsernameChanged(
-    UsernameChanged event,
+  void _onEmailChanged(
+    EmailChanged event,
     Emitter<LoginState> emit,
   ) {
-    final username = Username.dirty(event.username);
+    final email = Email.dirty(event.email);
     emit(
       state.copyWith(
-        username: username,
-        isValid: Formz.validate([state.password, username]),
+        email: email,
+        isValid: Formz.validate([state.password, email]),
       ),
     );
   }
@@ -44,7 +44,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(
       state.copyWith(
         password: password,
-        isValid: Formz.validate([password, state.username]),
+        isValid: Formz.validate([password, state.email]),
       ),
     );
   }
@@ -57,7 +57,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       try {
         await _authRepository.logIn(
-          username: state.username.value,
+          email: state.email.value,
           password: state.password.value,
         );
         emit(state.copyWith(status: FormzSubmissionStatus.success));

@@ -23,7 +23,7 @@ class LoginForm extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _UsernameInput(),
+            _EmailInput(),
             const Padding(padding: EdgeInsets.all(12)),
             _PasswordInput(),
             const Padding(padding: EdgeInsets.all(12)),
@@ -35,17 +35,17 @@ class LoginForm extends StatelessWidget {
   }
 }
 
-class _UsernameInput extends StatelessWidget {
+class _EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayError = context.select(
-      (LoginBloc bloc) => bloc.state.username.displayError,
+      (LoginBloc bloc) => bloc.state.email.displayError,
     );
 
     return TextField(
-      key: const Key('loginForm_usernameInput_textField'),
-      onChanged: (username) {
-        context.read<LoginBloc>().add(UsernameChanged(username));
+      key: const Key('loginForm_emailInput_textField'),
+      onChanged: (email) {
+        context.read<LoginBloc>().add(EmailChanged(email));
       },
       decoration: InputDecoration(
           border: const OutlineInputBorder(
@@ -56,7 +56,7 @@ class _UsernameInput extends StatelessWidget {
             Icons.email,
             color: Colors.green,
           ),
-          errorText: displayError != null ? 'invalid username' : null,
+          errorText: displayError != null ? 'invalid email' : null,
           suffixStyle: const TextStyle(color: Colors.green)),
     );
   }
